@@ -3,6 +3,7 @@ import sys
 import logging as log
 import datetime as dt
 from time import sleep
+import statistics
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
@@ -10,6 +11,17 @@ log.basicConfig(filename='webcam.log',level=log.INFO)
 
 video_capture = cv2.VideoCapture(0)
 anterior = 0
+faceAreaSamples = []
+
+def calibration():
+    print("Please hold still at desired range for 5 seconds.")
+    while i in range(0,50):
+        sleep(0.1)
+        if faces.size == 1:
+            for (x,y,h,w) in faces:
+                faceAreaSamples.append(h*w)     
+    print("Calibration complete")
+    return(statistics.mean(faceAreaSamples),statistics.stdev(faceAreaSamples))
 
 while True:
     if not video_capture.isOpened():
@@ -31,6 +43,7 @@ while True:
 
     # Draw a rectangle around the faces
     for (x, y, w, h) in faces:
+        print(w*h)
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
     if anterior != len(faces):
